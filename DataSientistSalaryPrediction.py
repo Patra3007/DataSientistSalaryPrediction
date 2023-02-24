@@ -3,11 +3,7 @@ import pandas as pd
 import numpy as np
 import time as t
 
-from sklearn.model_selection import train_test_split
-from sklearn.tree import DecisionTreeRegressor
-from sklearn.neighbors import KNeighborsRegressor
-from sklearn.ensemble import RandomForestRegressor
-from sklearn.metrics import mean_squared_error
+import sklearn as sk
 from tensorflow import keras
 
 header = st.container()
@@ -118,14 +114,14 @@ with modelTraining:
 
     X.drop(X.tail(1).index,inplace=True)
 
-    X_train, X_rest, y_train, y_rest = train_test_split(X, y, test_size=0.30, random_state=1)
+    X_train, X_rest, y_train, y_rest = sk.model_selection.train_test_split(X, y, test_size=0.30, random_state=1)
 
-    X_test, X_valid, y_test, y_valid = train_test_split(X_rest, y_rest, test_size=0.50, random_state=1)
-
-
+    X_test, X_valid, y_test, y_valid = sk.model_selection.train_test_split(X_rest, y_rest, test_size=0.50, random_state=1)
 
 
-    scaler = MinMaxScaler()
+
+
+    scaler = sk.preproccesing.MinMaxScaler()
     scaler.fit(X_train)
 
     X_train = scaler.transform(X_train)
@@ -136,13 +132,10 @@ with modelTraining:
     if clicked:
 
         if(mod == 'KNN'):   
-            model = KNeighborsRegressor(n_neighbors=3)
-            Neural = False
-        elif(mod == 'DecisionTree'):
-            model = DecisionTreeRegressor(criterion= "squared_error", max_depth=14, min_samples_split=14, random_state=0)
+            model = sk.neighbors.KNeighborsRegressor(n_neighbors=3)
             Neural = False
         elif(mod == 'RandomForest'):
-            model = RandomForestRegressor(criterion= "squared_error",n_estimators=100,random_state=0)
+            model = sk.ensemble.RandomForestRegressor(criterion= "squared_error",n_estimators=100,random_state=0)
             Neural = False
         else:    
             Neural = True 
